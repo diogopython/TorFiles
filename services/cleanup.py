@@ -28,19 +28,19 @@ class CleanupWorker:
         
         try:
             now = datetime.now()
-            
-            # Buscar arquivos expirados (por tempo ou downloads zerados)
+
+            now_str = now.strftime('%Y-%m-%d %H:%M:%S')
+
             expired_files = mariadb.execute(
                 """
                 SELECT uuid FROM files 
                 WHERE status != 'expired' 
                 AND (expires_at < %s OR downloads_remaining <= 0)
                 """,
-                (now,),
+                (now_str,),
                 fetch=True
             )
-            
-            # Atualizar status para expirado
+
             mariadb.execute(
                 """
                 UPDATE files 
@@ -48,24 +48,23 @@ class CleanupWorker:
                 WHERE status != 'expired' 
                 AND (expires_at < %s OR downloads_remaining <= 0)
                 """,
-                (now,)
+                (now_str,)
             )
             
-            # Opcional: remover arquivos expirados há muito tempo (ex: 7 dias)
-            # Isso libera espaço no PostgreSQL
-            # old_expired = mariadb.execute(
-            #     """
-            #     SELECT uuid FROM files
-            #     WHERE status = 'expired'
-            #     AND expires_at < DATE_SUB(%s, INTERVAL 7 DAY)
-            #     """,
-            #     (now,),
-            #     fetch=True
-            # )
-            #
-            # for file in old_expired:
-            #     postgres.delete_blob(file['uuid'])
-            #     mariadb.execute("DELETE FROM files WHERE uuid = %s", (file['uuid'],))
+            #remover arquivos expirados há muito tempo
+            old_expired = mariadb.execute(
+                """
+                SELECT uuid FROM files
+                WHERE status = 'expired'
+                AND expires_at < DATE_SUB(%s, INTERVAL 3 DAY)
+                """,
+                (now,),
+                fetch=True
+            )
+            
+            for file in old_expired:
+                postgres.delete_blob(file['uuid'])
+                mariadb.execute("DELETE FROM files WHERE uuid = %s", (file['uuid'],))
             
         except Exception as e:
             # Log mínimo por privacidade

@@ -44,9 +44,9 @@ Tamanho maximo: 100MB
 
 ## Navegacao
 
-- [Arquitetura](arquitetura) - Estrutura do sistema
-- [API](api) - Endpoints e rotas
-- [Banco de Dados](database) - Schemas e estrutura
-- [Seguranca](security) - Medidas de protecao
-- [Deployment](deployment) - Como implantar
-- [Uso](usage) - Guia de uso detalhado
+- [Arquitetura](./arquitetura.md) - Estrutura do sistema
+- [API](./api.md) - Endpoints e rotas
+- [Banco de Dados](./database.md) - Schemas e estrutura
+- [Seguranca](./security.md) - Medidas de protecao
+- [Deployment](./deployment.md) - Como implantar
+- [Uso](./usage.md) - Guia de uso detalhado

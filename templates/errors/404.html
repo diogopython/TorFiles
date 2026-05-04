@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}404 - Pagina Nao Encontrada - TorFiles{% endblock %}
+
+{% block content %}
+<div class="error-page">
+    <div class="error-code">404</div>
+    <h1>Pagina nao encontrada</h1>
+    <p>A pagina que voce esta procurando nao existe ou foi removida.</p>
+    <a href="{{ url_for('index') }}" class="btn btn-primary">Voltar ao Inicio</a>
+</div>
+{% endblock %}

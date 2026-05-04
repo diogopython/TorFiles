@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Criar Conta - TorFiles{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <h1>Criar Conta</h1>
+            <p>Registre-se para comecar a compartilhar arquivos</p>
+        </div>
+        
+        <form method="POST" class="auth-form">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input 
+                    type="text" 
+                    id="username" 
+                    name="username" 
+                    value="{{ username if username else '' }}"
+                    required 
+                    autocomplete="username"
+                    minlength="3"
+                    maxlength="50"
+                    pattern="^[a-zA-Z][a-zA-Z0-9_]*$"
+                    placeholder="Escolha um username"
+                >
+                <small class="form-hint">3-50 caracteres. Comeca com letra. Apenas letras, numeros e underscore.</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Senha</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    required 
+                    autocomplete="new-password"
+                    minlength="8"
+                    placeholder="Crie uma senha forte"
+                >
+                <small class="form-hint">Minimo 8 caracteres. Deve conter letras e numeros.</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="confirm_password">Confirmar Senha</label>
+                <input 
+                    type="password" 
+                    id="confirm_password" 
+                    name="confirm_password" 
+                    required 
+                    autocomplete="new-password"
+                    placeholder="Repita a senha"
+                >
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-block">Criar Conta</button>
+        </form>
+        
+        <div class="auth-footer">
+            <p>Ja tem uma conta? <a href="{{ url_for('auth.login') }}">Fazer login</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

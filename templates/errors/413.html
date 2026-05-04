@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}413 - Arquivo Muito Grande - TorFiles{% endblock %}
+
+{% block content %}
+<div class="error-page">
+    <div class="error-code">413</div>
+    <h1>Arquivo muito grande</h1>
+    <p>O arquivo que voce tentou enviar excede o limite de 100MB.</p>
+    <a href="{{ url_for('upload.form') }}" class="btn btn-primary">Tentar Novamente</a>
+</div>
+{% endblock %}

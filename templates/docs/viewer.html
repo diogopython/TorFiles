@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}{{ current_title }} - Documentacao - TorFiles{% endblock %}
+
+{% block content %}
+<div class="docs-layout">
+    <aside class="docs-sidebar">
+        <nav class="docs-nav">
+            <h3>Documentacao</h3>
+            <ul>
+                {% for name, title in pages %}
+                <li>
+                    <a href="{{ url_for('docs.view', page=name) }}" 
+                       class="{% if name == current_page %}active{% endif %}">
+                        {{ title }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </nav>
+    </aside>
+    
+    <main class="docs-content">
+        <article class="docs-article">
+            {{ content|safe }}
+        </article>
+    </main>
+</div>
+{% endblock %}

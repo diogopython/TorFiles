@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}Upload - TorFiles{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <div class="page-header">
+        <h1>Upload de Arquivo</h1>
+        <p>Arquivos ativos: {{ active_count }}/{{ max_files }}</p>
+    </div>
+    
+    <div class="upload-card">
+        <form method="POST" enctype="multipart/form-data" class="upload-form" id="uploadForm">
+            <div class="form-group">
+                <label for="file">Arquivo</label>
+                <div class="file-input-wrapper">
+                    <input 
+                        type="file" 
+                        id="file" 
+                        name="file" 
+                        required
+                        accept=".zip,.rar,.7z"
+                    >
+                    <div class="file-input-display" id="fileDisplay">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="17 8 12 3 7 8"/>
+                            <line x1="12" y1="3" x2="12" y2="15"/>
+                        </svg>
+                        <span>Clique para selecionar ou arraste um arquivo</span>
+                        <small>Formatos: .zip, .rar, .7z | Maximo: 100MB</small>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="description">Descricao (opcional)</label>
+                <textarea 
+                    id="description" 
+                    name="description" 
+                    rows="3"
+                    maxlength="1000"
+                    placeholder="Descreva o conteudo do arquivo..."
+                ></textarea>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="download_limit">Limite de Downloads</label>
+                    <input 
+                        type="number" 
+                        id="download_limit" 
+                        name="download_limit" 
+                        value="10"
+                        min="1"
+                        max="1000"
+                        required
+                    >
+                </div>
+                
+                <div class="form-group">
+                    <label for="expires_hours">Tempo de Expiracao</label>
+                    <select id="expires_hours" name="expires_hours" required>
+                        {% for value, label in expiration_options %}
+                            <option value="{{ value }}" {% if value == 24 %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Senha de Download (opcional)</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password"
+                    minlength="8"
+                    placeholder="Deixe vazio para nao exigir senha"
+                >
+                <small class="form-hint">Se definida, quem baixar precisara desta senha.</small>
+            </div>
+            
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">
+                    <span class="btn-text">Enviar Arquivo</span>
+                    <span class="btn-loading" style="display: none;">Enviando...</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Preview do nome do arquivo
+document.getElementById('file').addEventListener('change', function(e) {
+    const display = document.getElementById('fileDisplay');
+    if (this.files && this.files[0]) {
+        const file = this.files[0];
+        const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
+        display.innerHTML = '<strong>' + file.name + '</strong><br><small>' + sizeMB + ' MB</small>';
+        display.classList.add('file-selected');
+    }
+});
+
+// Loading no submit
+document.getElementById('uploadForm').addEventListener('submit', function() {
+    const btn = document.getElementById('submitBtn');
+    btn.querySelector('.btn-text').style.display = 'none';
+    btn.querySelector('.btn-loading').style.display = 'inline';
+    btn.disabled = true;
+});
+</script>
+{% endblock %}
